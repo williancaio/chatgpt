@@ -23,3 +23,9 @@ services:
       sh -c "aws --endpoint-url=http://localstack:4566 sqs create-queue --queue-name my-queue"
     depends_on:
       - localstack
+  create_secret:
+    image: amazon/aws-cli
+    command: >
+      sh -c "aws --endpoint-url=http://localstack:4566 secretsmanager create-secret --name my-secret --secret-string '{\"username\":\"admin\", \"password\":\"mypassword\"}'"
+    depends_on:
+      - localstack
