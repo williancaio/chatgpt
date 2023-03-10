@@ -17,15 +17,12 @@ services:
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-  create_queue:
+  sqs:
     image: amazon/aws-cli
-    command: >
-      sh -c "aws --endpoint-url=http://localstack:4566 sqs create-queue --queue-name my-queue"
-    depends_on:
-      - localstack
-  create_secret:
-    image: amazon/aws-cli
-    command: >
-      sh -c "aws --endpoint-url=http://localstack:4566 secretsmanager create-secret --name my-secret --secret-string '{\"username\":\"admin\", \"password\":\"mypassword\"}'"
-    depends_on:
-      - localstack
+    command: sqs create-queue --queue-name my-queue --endpoint-url=http://localhost:4566
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    ports:
+      - "4566:4566"
