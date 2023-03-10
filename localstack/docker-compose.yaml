@@ -17,3 +17,9 @@ services:
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+  create_queue:
+    image: amazon/aws-cli
+    command: >
+      sh -c "aws --endpoint-url=http://localstack:4566 sqs create-queue --queue-name my-queue"
+    depends_on:
+      - localstack
